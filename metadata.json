@@ -1,0 +1,5 @@
+{
+  "name": "NeuroRest: Neuron Resting Potential Simulator",
+  "description": "A high-precision simulator for computing neuronal resting membrane potential using the GHK current equation, featuring interactive ion controls and a voltage meter display.",
+  "requestFramePermissions": []
+}
