@@ -29,24 +29,23 @@ jobs:
         with:
           node-version: 24
 
-      - name: Verify files
-        run: |
-          pwd
-          ls -la
-          ls -la neurorest-simulator
-
       - name: Install dependencies
         working-directory: neurorest-simulator
         run: npm ci
-        
+
       - name: Build
         working-directory: neurorest-simulator
         run: npm run build
 
+      - name: Prepare Pages artifact with subdirectory
+        run: |
+          mkdir -p _site/neurorest-simulator
+          cp -r neurorest-simulator/dist/* _site/neurorest-simulator/
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: neurorest-simulator/dist
+          path: _site
 
   deploy:
     environment:
