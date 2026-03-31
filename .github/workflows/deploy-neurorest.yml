@@ -27,20 +27,18 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v5
         with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: neurorest-simulator/package-lock.json
+          node-version: 24
 
       - name: Verify files
         run: |
+          pwd
           ls -la
           ls -la neurorest-simulator
-          test -f neurorest-simulator/package-lock.json
 
       - name: Install dependencies
         working-directory: neurorest-simulator
         run: npm ci
-
+        
       - name: Build
         working-directory: neurorest-simulator
         run: npm run build
