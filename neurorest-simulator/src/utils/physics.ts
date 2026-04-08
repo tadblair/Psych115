@@ -91,7 +91,7 @@ export function runSimulation(ions: IonData[], tempCelsius: number, injectedCurr
       name: ion.name,
       symbol: ion.symbol,
       nernstPotential: E,
-      drivingForce: Vm - E,
+      drivingForce: ion.charge * (Vm - E),
       electricalForce: ion.charge * Vm,
       chemicalForce: -ion.charge * E,
       current: calculateIonCurrent(Vm, ion, tempCelsius)

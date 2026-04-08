@@ -15,12 +15,19 @@ export const DrivingForceChart: React.FC<DrivingForceChartProps> = ({ results })
   }));
 
   return (
-    <div className="h-[250px] w-full bg-zinc-900/30 p-4 rounded-xl border border-white/5">
+    <div className="h-[250px] w-full bg-zinc-900/30 p-4 rounded-xl border border-white/5 relative">
       <div className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-4 text-center">
-        Driving Force (Vm - Eion)
+        Driving Force (z * (Vm - Eion))
       </div>
+      
+      {/* Directional Labels */}
+      <div className="absolute left-2 top-12 bottom-12 flex flex-col justify-between pointer-events-none z-10">
+        <span className="text-[8px] font-mono text-zinc-600 uppercase vertical-text transform -rotate-90 origin-left">Outward</span>
+        <span className="text-[8px] font-mono text-zinc-600 uppercase vertical-text transform -rotate-90 origin-left">Inward</span>
+      </div>
+
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
+        <BarChart data={data} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2b2f" vertical={false} />
           <XAxis 
             dataKey="name" 
