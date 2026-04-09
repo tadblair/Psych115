@@ -48,8 +48,8 @@ export function calculateIonCurrent(Vm: number, ion: IonData, tempCelsius: numbe
  * Finds the membrane potential Vm where total current is zero using Bisection method
  */
 export function solveMembranePotential(ions: IonData[], tempCelsius: number, injectedCurrent: number = 0): number {
-  let low = -150; // mV
-  let high = 100; // mV
+  let low = -250; // mV
+  let high = 250; // mV
   const tolerance = 1e-5;
   const maxIterations = 100;
 
