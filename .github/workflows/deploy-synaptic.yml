@@ -1,0 +1,58 @@
+name: Deploy synapticintegration-simulator to GitHub Pages
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "synapticintegration-simulator/**"
+      - ".github/workflows/deploy-synaptic.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages-synaptic"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        working-directory: synapticintegration-simulator
+        run: npm ci
+
+      - name: Build
+        working-directory: synapticintegration-simulator
+        run: npm run build
+
+      - name: Prepare Pages artifact
+        run: |
+          mkdir -p _site/synapticintegration-simulator
+          cp -r synapticintegration-simulator/dist/* _site/synapticintegration-simulator/
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    environment:
+      name: github-pages
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
