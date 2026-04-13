@@ -42,10 +42,15 @@ jobs:
         working-directory: ./neurorest-simulator
         run: npm run build
 
+      - name: Assemble Pages artifact
+        run: |
+          mkdir -p site/neurorest-simulator
+          cp -r neurorest-simulator/dist/* site/neurorest-simulator/
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: ./neurorest-simulator/dist
+          path: ./site
 
   deploy:
     needs: build
