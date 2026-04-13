@@ -1,11 +1,8 @@
-name: Deploy neurorest-simulator to GitHub Pages
+name: Deploy neurorest to GitHub Pages
 
 on:
   push:
-    branches: [ "main" ]
-    paths:
-      - "neurorest-simulator/**"
-      - ".github/workflows/deploy-neurorest.yml"
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -14,46 +11,50 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages-neurorest"
+  group: pages
   cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repo
         uses: actions/checkout@v5
 
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
       - name: Setup Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: 24
+          cache: npm
+          cache-dependency-path: neurorest-simulator/package-lock.json
 
       - name: Install dependencies
-        working-directory: neurorest-simulator
-        run: npm ci
+        working-directory: ./neurorest-simulator
+        run: npm install
 
-      - name: Build
-        working-directory: neurorest-simulator
+      - name: Build app
+        working-directory: ./neurorest-simulator
         run: npm run build
 
-      - name: Prepare Pages artifact with subdirectory
-        run: |
-          mkdir -p _site/neurorest-simulator
-          cp -r neurorest-simulator/dist/* _site/neurorest-simulator/
-
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
-          path: _site
+          path: ./neurorest-simulator/dist
 
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
+
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4cd ..
+        uses: actions/deploy-pages@v4
